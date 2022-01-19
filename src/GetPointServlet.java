@@ -50,6 +50,7 @@ public class GetPointServlet extends HttpServlet {
 			PreparedStatement st = connection.prepareStatement(
 							"select point from POINT where USER_ID = ? AND TENPO_ID = ?"
 						);
+			
 			st.setString(1, request.getParameter("USER_ID"));
 			st.setString(2, request.getParameter("TENPO_ID"));
 			ResultSet result = st.executeQuery();
