@@ -69,8 +69,8 @@ public class GetPointServlet extends HttpServlet {
 				PreparedStatement st2 = connection.prepareStatement(
 						"insert into point(TENPO_ID,USER_ID,POINT) values(?,?,500)"
 					);
-				st.setString(1, sa);
-				st.setString(2, a);
+				st2.setString(1, sa);
+				st2.setString(2, a);
 		//		st2.setString(1, sa);
 		//		st2.setString(2, a);
 				
