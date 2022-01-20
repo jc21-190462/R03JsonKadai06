@@ -48,31 +48,36 @@ public class GetPointServlet extends HttpServlet {
 			Class.forName(driverName);
 			Connection connection=DriverManager.getConnection(url,id,pass);
 			PreparedStatement st = connection.prepareStatement(
-							"select point from POINT where USER_ID = ? AND TENPO_ID = ?"
+							"select point from POINT where TENPO_ID=? AND USER_ID=?"
+					//"select * from point"
 						);
-			
-			st.setString(1, request.getParameter("USER_ID"));
-			st.setString(2, request.getParameter("TENPO_ID"));
+			//String sa="sa";
+		//	String a="aaa";
+			st.setString(1, request.getParameter("TENPO_ID"));
+			st.setString(2, request.getParameter("USER_ID"));
+		//	st.setString(1, sa);
+		//	st.setString(2, a);
 			ResultSet result = st.executeQuery();
 			
 			List<String[]> list=new ArrayList<>();
 			
-			while( result.next() == true) {
-				String[] s=new String[3];
+			if( result.next() == true) {
+				String[] s=new String[1];
 				s[0]=result.getString("point");
 				list.add(s);	
-			}
-			
-			if(result.next() == false) {
+			}else {
 				PreparedStatement st2 = connection.prepareStatement(
-						"insert into point(USER_ID,TENPO_ID,POINT) values(?,?,500)"
+						"insert into point(TENPO_ID,USER_ID,POINT) values(?,?,500)"
 					);
-				st2.setString(1, request.getParameter("USER_ID"));
-				st2.setString(2, request.getParameter("TENPO_ID"));
+				st.setString(1, request.getParameter("TENPO_ID"));
+				st.setString(2, request.getParameter("USER_ID"));
+		//		st2.setString(1, sa);
+		//		st2.setString(2, a);
+				
 				int x=st2.executeUpdate();
 				if(x == 1) {
-					System.out.print("新規追加成功");
-				}System.out.print("新規追加失敗");
+					System.out.println("新規追加成功");
+				}System.out.println("新規追加失敗");
 			}
 			
 			for(String n[]:list) {
