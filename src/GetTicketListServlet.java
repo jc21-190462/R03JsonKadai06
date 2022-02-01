@@ -1,6 +1,7 @@
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -36,45 +37,59 @@ public class GetTicketListServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		final String driverName = "com.mysql.jdbc.Driver";
+		final String url = "jdbc:mysql://192.168.54.190:3306/jsonkadai06";
+		final String id = "jsonkadai06";
+		final String pass = "JsonKadai06";
+		
 		try {
-			/*InitialContext ic = new InitialContext();
-			DataSource ds = (DataSource) ic.lookup("java:/comp/env/jdbc/jsonkadai06");
-			Connection con=ds.getConnection();
+			Class.forName(driverName);
+			Connection connection=DriverManager.getConnection(url,id,pass);
+			PreparedStatement st = connection.prepareStatement(
+							"select ticket_id,ticket_name,point from TICKET where TENPO_ID=? AND USER_ID=?"
+					//"select * from point"
+						);
 			
-			String sql = "select ticket_id,ticket_name,hpoint from TICKET ";
-			// --- プリペアドステートメントへ登録
-			PreparedStatement st = con.prepareStatement(sql);
-			// --- クエリの結果を取得
-			ResultSet rs = st.executeQuery();
-			// --- 結果のリストをaryへ追加するための繰返し処理
-			List<String[]> ary=new ArrayList<>();
-			while (rs.next()) {
-				// --- １件分のデータを格納するBeanを作成
-				String[] p = {
-						rs.getString("ticket_id"),
-						rs.getString("ticket_name"),
-						rs.getString("hpoint")
-				};
-				// --- Beanを配列aryに追加
-				ary.add(p);
-			}
-			// --- オブジェクトを閉じる
-			st.close();
-			con.close();*/
+			String sa=request.getParameter("TENPO_ID");
+			String a=request.getParameter("USER_ID");
+			
+			st.setString(1, sa);
+			st.setString(2, a);
+			
+			ResultSet result = st.executeQuery();
+			
+			List<String[]> list=new ArrayList<>();
+			if( result.next() == true) {
+				String[] s=new String[1];
+				s[0]=result.getString("point");
+				list.add(s);	
+			}else {
+				PreparedStatement st2 = connection.prepareStatement(
+						"insert into point(TENPO_ID,USER_ID,POINT) values(?,?,500)"
+					);
 
-			String[] s= {"1","ohoh","100"};
-			request.setAttribute("list", s);
+				st2.setString(1, sa);
+				st2.setString(2, a);
+				
+				int x=st2.executeUpdate();
+				if(x == 1) {
+					System.out.println("新規追加成功");
+				}System.out.println("新規追加失敗");
+			}
 			
-			//System.out.println(ary.get(0));
+			for(String n[]:list) {
+				System.out.println(n[0]);
+			}
 			
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/getTicketList.jsp");
+			request.setAttribute("list", list);
+			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/getPoint.jsp");
 			rd.forward(request, response);
 			
-			
-		}
-		catch (Exception e) {
-			// TODO: handle exception
-			
+		} catch (ClassNotFoundException e ) {
+			// TODO 閾ｪ蜍慕函謌舌＆繧後◆ catch 繝悶Ο繝�繧ｯ
+			e.printStackTrace();
+		} catch (SQLException e ) {
+			// TODO 閾ｪ蜍慕函謌舌＆繧後◆ catch 繝悶Ο繝�繧ｯ
 			e.printStackTrace();
 		}
 	}

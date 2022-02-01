@@ -55,8 +55,6 @@ public class GetPointServlet extends HttpServlet {
 			String a=request.getParameter("USER_ID");
 			st.setString(1, sa);
 			st.setString(2, a);
-		//	st.setString(1, sa);
-		//	st.setString(2, a);
 			ResultSet result = st.executeQuery();
 			
 			List<String[]> list=new ArrayList<>();
@@ -71,8 +69,6 @@ public class GetPointServlet extends HttpServlet {
 					);
 				st2.setString(1, sa);
 				st2.setString(2, a);
-		//		st2.setString(1, sa);
-		//		st2.setString(2, a);
 				
 				int x=st2.executeUpdate();
 				if(x == 1) {
