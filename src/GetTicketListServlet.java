@@ -46,30 +46,31 @@ public class GetTicketListServlet extends HttpServlet {
 			Class.forName(driverName);
 			Connection connection=DriverManager.getConnection(url,id,pass);
 			PreparedStatement st = connection.prepareStatement(
-							"select ticket_id,ticket_name,point from TICKET where TENPO_ID=? AND USER_ID=?"
+							"select ticket_id,ticket_name,point from TICKET where TENPO_ID=? AND point <= (select point from POINT where TENPO_ID=? AND USER_ID=?)"
 					//"select * from point"
 						);
 			
-			String sa=request.getParameter("TENPO_ID");
-			String a=request.getParameter("USER_ID");
+			String ten=request.getParameter("TENPO_ID");
+			String use=request.getParameter("USER_ID");
 			
-			st.setString(1, sa);
-			st.setString(2, a);
+			st.setString(1, ten);
+			st.setString(2, ten);
+			st.setString(3, use);
 			
 			ResultSet result = st.executeQuery();
 			
 			List<String[]> list=new ArrayList<>();
 			if( result.next() == true) {
-				String[] s=new String[1];
-				s[0]=result.getString("point");
+				String[] s=new String[3];
+				s[0]=result.getString("ticket_id");
+				s[1]=result.getString("ticket_name");
+				s[2]=result.getString("point");
 				list.add(s);	
 			}else {
 				PreparedStatement st2 = connection.prepareStatement(
-						"insert into point(TENPO_ID,USER_ID,POINT) values(?,?,500)"
+						"insert into point(TENPO_ID,TICKET_ID,TICKET_NAME,POINT,KIGEN) values(?,1,tya-tan,500,2022/12/12)"
 					);
-
-				st2.setString(1, sa);
-				st2.setString(2, a);
+				st2.setString(1, ten);
 				
 				int x=st2.executeUpdate();
 				if(x == 1) {
