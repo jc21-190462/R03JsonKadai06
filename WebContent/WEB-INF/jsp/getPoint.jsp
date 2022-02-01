@@ -11,7 +11,6 @@ if (optList.isPresent()) {
 	list = optList.get();
 }
 %>
-{"POINT":3580}
 <%
 for (String[] s : list) {
 %>
