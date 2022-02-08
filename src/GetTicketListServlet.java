@@ -68,7 +68,7 @@ public class GetTicketListServlet extends HttpServlet {
 				list.add(s);	
 			}else {
 				PreparedStatement st2 = connection.prepareStatement(
-						"insert into point(TENPO_ID,TICKET_ID,TICKET_NAME,POINT,KIGEN) values(?,1,tya-tan,500,2022/12/12)"
+						"insert into point(TENPO_ID,TICKET_ID,TICKET_NAME,POINT,KIGEN) values(?,1,チャーハン,500,2022/12/12)"
 					);
 				st2.setString(1, ten);
 				
@@ -83,7 +83,7 @@ public class GetTicketListServlet extends HttpServlet {
 			}
 			
 			request.setAttribute("list", list);
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/getPoint.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/getTicketList.jsp");
 			rd.forward(request, response);
 			
 		} catch (ClassNotFoundException e ) {
