@@ -60,7 +60,7 @@ public class GetTicketListServlet extends HttpServlet {
 			ResultSet result = st.executeQuery();
 			
 			List<String[]> list=new ArrayList<>();
-			if( result.next() == true) {
+			while( result.next() == true) {
 				String[] s=new String[3];
 				s[0]=result.getString("ticket_id");
 				s[1]=result.getString("ticket_name");
