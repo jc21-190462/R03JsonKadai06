@@ -68,7 +68,7 @@ public class GetTicketListServlet extends HttpServlet {
 				list.add(s);	
 			}else {
 				PreparedStatement st2 = connection.prepareStatement(
-						"insert into point(TENPO_ID,TICKET_ID,TICKET_NAME,POINT,KIGEN) values(?,1,チャーハン,500,2022/12/12)"
+						"insert into ticket(TENPO_ID,TICKET_ID,TICKET_NAME,POINT,KIGEN) values(?,1,チャーハン,500,2022/12/12)"
 					);
 				st2.setString(1, ten);
 				
