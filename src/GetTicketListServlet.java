@@ -60,30 +60,15 @@ public class GetTicketListServlet extends HttpServlet {
 			ResultSet result = st.executeQuery();
 			
 			List<String[]> list=new ArrayList<>();
-			if( result.next() == true) {
+			while( result.next() == true) {
 				String[] s=new String[3];
 				s[0]=result.getString("ticket_id");
 				s[1]=result.getString("ticket_name");
 				s[2]=result.getString("point");
 				list.add(s);	
-			}else {
-				PreparedStatement st2 = connection.prepareStatement(
-						"insert into point(TENPO_ID,TICKET_ID,TICKET_NAME,POINT,KIGEN) values(?,1,tya-tan,500,2022/12/12)"
-					);
-				st2.setString(1, ten);
-				
-				int x=st2.executeUpdate();
-				if(x == 1) {
-					System.out.println("新規追加成功");
-				}System.out.println("新規追加失敗");
 			}
-			
-			for(String n[]:list) {
-				System.out.println(n[0]);
-			}
-			
 			request.setAttribute("list", list);
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/getPoint.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/getTicketList.jsp");
 			rd.forward(request, response);
 			
 		} catch (ClassNotFoundException e ) {
